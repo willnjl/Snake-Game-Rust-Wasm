@@ -1,0 +1,3 @@
+wasm-pack build --target web
+
+cargo watch -s "wasm-pack build --target web" -w "src" 
