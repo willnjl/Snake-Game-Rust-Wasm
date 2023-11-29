@@ -1,5 +1,5 @@
 import init, { World, GameStateKind } from "../pkg/snake_game.js";
-import { rnd } from "./utils/rnd.js";
+import { rnd } from "./utils";
 
 init().then((wasm) => {
 	const GRID_WIDTH = 10;
