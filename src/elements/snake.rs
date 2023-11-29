@@ -136,7 +136,6 @@ impl Snake {
 
     pub fn change_direction(&mut self, direction: DirectionKind) {
         let next_cell = self.gen_next_snake_cell(&direction);
-
         if !self.body.contains_cell(&next_cell) {
             self.direction = direction
         }
