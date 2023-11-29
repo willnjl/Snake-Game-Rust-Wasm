@@ -1,7 +1,7 @@
 use crate::elements::snake::{Cell, Snake};
 use crate::utilities::rnd;
 #[derive(Clone, Copy, PartialEq)]
-pub struct Reward(Cell);
+pub struct Reward(pub Cell);
 
 impl Reward {
     pub fn new(max: usize, snake: &Snake) -> Reward {

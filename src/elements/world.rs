@@ -7,8 +7,6 @@ use crate::elements::reward::Reward;
 use crate::elements::snake::Cell;
 use crate::elements::snake::Snake;
 
-use crate::utilities::log;
-
 #[wasm_bindgen]
 pub struct World {
     width: usize,
@@ -23,7 +21,7 @@ pub struct World {
 impl World {
     pub fn new(width: usize, starting_index: usize, starting_size: usize) -> World {
         let size: usize = width * width;
-        let snake: Snake = Snake::new(starting_index, starting_size);
+        let snake: Snake = Snake::new(starting_index, starting_size, width, size);
         let reward = Some(Reward::new(size, &snake));
         let state = GameState::new();
 
@@ -40,21 +38,16 @@ impl World {
     pub fn step(&mut self) {
         match self.state.get_state() {
             Some(GameStateKind::Played) => {
-                self.snake.step(self.width, self.size);
-
+                self.snake.step();
                 if Reward::check_consumed(&self.reward, &self.snake.head()) {
                     self.consume_reward();
                 }
-
                 if self.snake.check_dead() {
                     self.lose();
                 }
             }
             _ => {}
         }
-    }
-    pub fn change_snake_direction(&mut self, direction: DirectionKind) {
-        self.snake.direction = direction
     }
 
     pub fn width(&self) -> usize {
@@ -87,9 +80,13 @@ impl World {
         };
     }
 
+    pub fn change_snake_direction(&mut self, direction: DirectionKind) {
+        self.snake.change_direction(direction)
+    }
+
     fn consume_reward(&mut self) {
         if self.snake.length() < self.size {
-            self.snake.consume(&self.reward.unwrap());
+            self.snake.consume();
             self.points += 1;
         } else {
             self.win();
