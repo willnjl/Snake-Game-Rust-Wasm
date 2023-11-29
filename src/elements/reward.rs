@@ -1,10 +1,7 @@
-use crate::elements::snake::SnakeCell;
+use crate::elements::snake::{Cell, Snake};
 use crate::utilities::rnd;
-
-use super::snake::Snake;
-
 #[derive(Clone, Copy, PartialEq)]
-pub struct Reward(usize);
+pub struct Reward(Cell);
 
 impl Reward {
     pub fn new(max: usize, snake: &Snake) -> Reward {
@@ -13,20 +10,20 @@ impl Reward {
 
         loop {
             random_cell = rnd(max);
-            if !snake.body.contains_cell(&SnakeCell(random_cell)) {
+            if !snake.body.contains_cell(&Cell(random_cell)) {
                 reward_cell = random_cell;
                 break;
             }
         }
 
-        Reward(reward_cell)
+        Reward(Cell(reward_cell))
     }
 
     pub fn index(&self) -> usize {
-        self.0
+        self.0.index()
     }
 
-    pub fn check_consumed(reward: &Option<Reward>, head: &SnakeCell) -> bool {
+    pub fn check_consumed(reward: &Option<Reward>, head: &Cell) -> bool {
         return match reward {
             Some(reward) => return reward.index() == head.index(),
             None => false,

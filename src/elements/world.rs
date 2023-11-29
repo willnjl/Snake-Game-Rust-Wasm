@@ -1,10 +1,12 @@
 use wasm_bindgen::prelude::*;
 
+use crate::elements::direction::DirectionKind;
 use crate::elements::gamestate::GameState;
 use crate::elements::gamestate::GameStateKind;
 use crate::elements::reward::Reward;
+use crate::elements::snake::Cell;
 use crate::elements::snake::Snake;
-use crate::elements::snake::SnakeCell;
+
 use crate::utilities::log;
 
 #[wasm_bindgen]
@@ -51,6 +53,39 @@ impl World {
             _ => {}
         }
     }
+    pub fn change_snake_direction(&mut self, direction: DirectionKind) {
+        self.snake.direction = direction
+    }
+
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
+    pub fn size(&self) -> usize {
+        self.size
+    }
+
+    pub fn state(&self) -> Option<GameStateKind> {
+        self.state.get_state()
+    }
+    /**
+     * *const is raw pointer
+     * borrowing rules dont apply
+     */
+    pub fn snake_cells(&self) -> *const Cell {
+        self.snake.body().as_ptr()
+    }
+
+    pub fn snake_length(&self) -> usize {
+        self.snake.length()
+    }
+
+    pub fn reward_cell(&self) -> usize {
+        return match self.reward {
+            Some(cell) => cell.index(),
+            _ => self.size() + 1,
+        };
+    }
 
     fn consume_reward(&mut self) {
         if self.snake.length() < self.size {
@@ -68,34 +103,5 @@ impl World {
 
     fn lose(&mut self) {
         self.state.lost()
-    }
-    pub fn width(&self) -> usize {
-        self.width
-    }
-
-    pub fn size(&self) -> usize {
-        self.size
-    }
-
-    pub fn state(&self) -> Option<GameStateKind> {
-        self.state.get_state()
-    }
-    /**
-     * *const is raw pointer
-     * borrowing rules dont apply
-     */
-    pub fn snake_cells(&self) -> *const SnakeCell {
-        self.snake.body().as_ptr()
-    }
-
-    pub fn snake_length(&self) -> usize {
-        self.snake.length()
-    }
-
-    pub fn reward_cell(&self) -> usize {
-        return match self.reward {
-            Some(cell) => cell.index(),
-            _ => self.size() + 1,
-        };
     }
 }

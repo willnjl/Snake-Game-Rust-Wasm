@@ -1,4 +1,4 @@
-import init, { World, GameStateKind } from "../pkg/snake_game.js";
+import init, { World, GameStateKind, DirectionKind } from "../pkg/snake_game.js";
 import { rnd } from "./utils";
 
 init().then((wasm) => {
@@ -86,6 +86,24 @@ init().then((wasm) => {
 			alert("Your Won!");
 		}
 	}
+
+	document.addEventListener('keydown', ({code}) => {
+		if (code === "ArrowLeft") {
+			world.change_snake_direction(DirectionKind.Left)
+		}
+		if (code === "ArrowRight") {
+			world.change_snake_direction(DirectionKind.Right)
+		}
+		if (code === "ArrowUp") {
+			world.change_snake_direction(DirectionKind.Up)
+		}
+		if (code === "ArrowDown") {
+			world.change_snake_direction(DirectionKind.Down)
+		}
+	
+	})
+
+
     const paint = () => {
 		drawWorld();
 		drawSnake();
