@@ -88,6 +88,7 @@ impl World {
         if self.snake.length() < self.size {
             self.snake.consume();
             self.points += 1;
+            self.reward = Some(Reward::new(self.size, &self.snake))
         } else {
             self.win();
         }
