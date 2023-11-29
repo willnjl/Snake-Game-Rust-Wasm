@@ -14,10 +14,11 @@ pub struct GameState {
     state: Option<GameStateKind>,
 }
 
-#[wasm_bindgen]
 impl GameState {
     pub fn new() -> Self {
-        Self { state: None }
+        Self {
+            state: Some(GameStateKind::Played),
+        }
     }
 
     pub fn playing(&mut self) {

@@ -1,6 +1,6 @@
-use crate::elements::direction::Direction;
-
 use super::reward::Reward;
+use crate::elements::direction::Direction;
+use crate::utilities::log;
 
 #[derive(Clone, Copy, PartialEq)]
 pub struct SnakeCell(pub usize);
@@ -43,7 +43,6 @@ impl Body {
 
 pub struct Snake {
     pub direction: Direction,
-    pub next_cell: Option<SnakeCell>,
     pub body: Body,
 }
 
@@ -58,7 +57,6 @@ impl Snake {
         Snake {
             body: Body(body),
             direction: Direction::Right,
-            next_cell: None,
         }
     }
 
@@ -68,15 +66,7 @@ impl Snake {
 
     pub fn step(&mut self, width: usize, size: usize) {
         self.body.step();
-
-        // handle next_cell option enum
-        match self.next_cell {
-            Some(_) => {
-                self.next_cell = Some(self.gen_next_snake_cell(width, size));
-                self.next_cell = None;
-            }
-            None => self.next_cell = Some(self.gen_next_snake_cell(width, size)),
-        }
+        self.body.0[0] = self.gen_next_snake_cell(width, size);
     }
 
     fn gen_next_snake_cell(&self, width: usize, size: usize) -> SnakeCell {
@@ -131,6 +121,6 @@ impl Snake {
     }
 
     pub fn check_dead(&self) -> bool {
-        return self.body()[1..self.length()].contains(&self.head());
+        return self.body.0[1..self.length()].contains(&self.head());
     }
 }

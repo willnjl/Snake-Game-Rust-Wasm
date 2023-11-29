@@ -1,5 +1,5 @@
 use crate::elements::snake::SnakeCell;
-use crate::utilities::rnd::rnd;
+use crate::utilities::rnd;
 
 use super::snake::Snake;
 

@@ -4,6 +4,8 @@ use crate::elements::gamestate::GameState;
 use crate::elements::gamestate::GameStateKind;
 use crate::elements::reward::Reward;
 use crate::elements::snake::Snake;
+use crate::elements::snake::SnakeCell;
+use crate::utilities::log;
 
 #[wasm_bindgen]
 pub struct World {
@@ -73,5 +75,27 @@ impl World {
 
     pub fn size(&self) -> usize {
         self.size
+    }
+
+    pub fn state(&self) -> Option<GameStateKind> {
+        self.state.get_state()
+    }
+    /**
+     * *const is raw pointer
+     * borrowing rules dont apply
+     */
+    pub fn snake_cells(&self) -> *const SnakeCell {
+        self.snake.body().as_ptr()
+    }
+
+    pub fn snake_length(&self) -> usize {
+        self.snake.length()
+    }
+
+    pub fn reward_cell(&self) -> usize {
+        return match self.reward {
+            Some(cell) => cell.index(),
+            _ => self.size() + 1,
+        };
     }
 }
