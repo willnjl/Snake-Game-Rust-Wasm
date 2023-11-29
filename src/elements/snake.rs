@@ -1,21 +1,50 @@
 use crate::elements::direction::Direction;
 
+use super::reward::Reward;
+
 #[derive(Clone, Copy, PartialEq)]
 pub struct SnakeCell(pub usize);
 
+impl SnakeCell {
+    pub fn index(&self) -> usize {
+        self.0
+    }
+}
+
 #[derive(Clone, PartialEq)]
-pub struct Body(Vec<SnakeCell>);
+pub struct Body(pub Vec<SnakeCell>);
 
 impl Body {
     pub fn contains_cell(&self, cell: &SnakeCell) -> bool {
         self.0.contains(cell)
+    }
+
+    pub fn step(&mut self) {
+        let temp: Vec<SnakeCell> = self.get().clone();
+        let len = temp.len();
+
+        for i in 1..len {
+            self.0[i] = SnakeCell(temp[i - 1].0);
+        }
+    }
+
+    pub fn length(&self) -> usize {
+        self.0.len()
+    }
+
+    pub fn get(&self) -> &Vec<SnakeCell> {
+        &self.0
+    }
+
+    pub fn add(&mut self, cell: &Reward) {
+        self.0.push(SnakeCell(cell.index()));
     }
 }
 
 pub struct Snake {
     pub direction: Direction,
     pub next_cell: Option<SnakeCell>,
-    body: Body,
+    pub body: Body,
 }
 
 impl Snake {
@@ -33,7 +62,75 @@ impl Snake {
         }
     }
 
-    pub fn body(&self) -> &Body {
-        &self.body
+    pub fn head(&self) -> SnakeCell {
+        self.body.0[0]
+    }
+
+    pub fn step(&mut self, width: usize, size: usize) {
+        self.body.step();
+
+        // handle next_cell option enum
+        match self.next_cell {
+            Some(_) => {
+                self.next_cell = Some(self.gen_next_snake_cell(width, size));
+                self.next_cell = None;
+            }
+            None => self.next_cell = Some(self.gen_next_snake_cell(width, size)),
+        }
+    }
+
+    fn gen_next_snake_cell(&self, width: usize, size: usize) -> SnakeCell {
+        let snake_idx: usize = self.head().index();
+        let row: usize = snake_idx / width;
+
+        return match self.direction {
+            Direction::Right => {
+                let treshold = (row + 1) * width;
+                if snake_idx + 1 == treshold {
+                    SnakeCell(treshold - width)
+                } else {
+                    SnakeCell(snake_idx + 1)
+                }
+            }
+            Direction::Left => {
+                let treshold = row * width;
+                if snake_idx == treshold {
+                    SnakeCell(treshold + (width - 1))
+                } else {
+                    SnakeCell(snake_idx - 1)
+                }
+            }
+            Direction::Up => {
+                let treshold = snake_idx - (row * width);
+                if snake_idx == treshold {
+                    SnakeCell((size - width) + treshold)
+                } else {
+                    SnakeCell(snake_idx - width)
+                }
+            }
+            Direction::Down => {
+                let treshold = snake_idx + ((width - row) * width);
+                if snake_idx + width == treshold {
+                    SnakeCell(treshold - ((row + 1) * width))
+                } else {
+                    SnakeCell(snake_idx + width)
+                }
+            }
+        };
+    }
+
+    pub fn length(&self) -> usize {
+        self.body.length()
+    }
+    pub fn body(&self) -> &Vec<SnakeCell> {
+        self.body.get()
+    }
+
+    pub fn consume(&mut self, cell: &Reward) {
+        self.body.add(cell)
+    }
+
+    pub fn check_dead(&self) -> bool {
+        return self.body()[1..self.length()].contains(&self.head());
     }
 }
