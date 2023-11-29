@@ -97,9 +97,11 @@ impl World {
     fn win(&mut self) {
         self.reward = None;
         self.state.won();
+        self.reward = None;
     }
 
     fn lose(&mut self) {
-        self.state.lost()
+        self.state.lost();
+        self.reward = None;
     }
 }
