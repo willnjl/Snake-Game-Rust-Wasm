@@ -84,6 +84,19 @@ impl World {
         self.snake.change_direction(direction)
     }
 
+    pub fn game_status_text(&self) -> String {
+        match self.state.get_state() {
+            Some(GameStateKind::Played) => String::from("You are playing"),
+            Some(GameStateKind::Lost) => String::from("You Lost!"),
+            Some(GameStateKind::Won) => String::from("You Won!"),
+            _ => String::from("Start the game"),
+        }
+    }
+
+    pub fn points(&self) -> usize {
+        self.points
+    }
+
     fn consume_reward(&mut self) {
         if self.snake.length() < self.size {
             self.snake.consume();
