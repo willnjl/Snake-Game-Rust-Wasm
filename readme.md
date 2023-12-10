@@ -1,6 +1,8 @@
 # Snake Game in Rust with WASM and TypeScript
 
-Welcome to the Snake Game, an experimental project created by me. This implementation combines the power of Rust compiled to WebAssembly (WASM) and executed with TypeScript. The game is a basic rendition of the classic game Snake.
+ The game is a basic rendition of the classic game Snake. This project was a just for fun example to get familiar with the Rust programming language. This implementation combines the power of Rust compiled to WebAssembly (WASM) and executed with TypeScript
+
+It is based of the the Rust Udemy Course from [Jerga99](https://github.com/Jerga99)
 
 ## Try the Game
 
@@ -52,8 +54,3 @@ To run the project locally, follow these steps:
 
    Open your web browser and go to [http://localhost:8080](http://localhost:8080) to play the Snake Game.
 
-## Feedback and Contributions
-
-Your feedback is valuable! If you encounter issues, have suggestions, or want to contribute to the project, feel free to open an issue or submit a pull request.
-
-Enjoy playing the Snake Game! 🐍🎮
