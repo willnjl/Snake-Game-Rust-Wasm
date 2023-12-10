@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Snake Game</title>
+	</head>
+	<body>
+		<div class="max-w-3xl mx-auto p-5 pt-10">
+			<h1 class="text-4xl mb-20">
+				Rust + WebAssembly Snake Game with Typescript
+			</h1>
+			<div class="sm:flex">
+				<canvas id="snake-canvas" class="flex-1 w-full"></canvas>
+				<aside class="pt-8 sm:pt-0 sm:pl-5 flex-1">
+					<div class="mb-5">
+						Status <span id="game-status" class="font-bold">None</span>
+					</div>
+					<div class="mb-5">
+						Points <span id="game-points" class="font-bold">0</span>
+					</div>
+					<button
+						id="game-control-btn"
+						class="bg-green-300 rounded-[30px] min-w-[5rem] py-2 px-10 font-bold"
+					>
+						Play
+					</button>
+				</aside>
+			</div>
+			<div class="pt-20">
+				<p>
+					This mini project created in order to experiment with compiling Rust
+					code to WebAssembly and running with Typescript.
+					<a> Repo including TS and Rust code.</a>
+				</p>
+			</div>
+		</div>
+		<script src="./bootstrap.js"></script>
+	</body>
+</html>
