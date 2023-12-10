@@ -1,18 +1,17 @@
-import init, { World, GameStateKind, DirectionKind } from "../pkg/snake_game.js";
+import init, { World, GameStateKind, DirectionKind } from "snake_game";
 import { rnd } from "./utils";
 import paint from "./src/paint";
-import { addKeyboardListener } from "./src/events";
-import { canvas,ctx } from "./src/consts";
+import { handleControlBtnClick, handleKeyPress } from "./src/events";
+import { canvas,ctx, gameControlBtn } from "./src/consts";
 
 init().then((wasm) => {
 	const GRID_WIDTH = 10;
-	const RAND_START = rnd(GRID_WIDTH * GRID_WIDTH);
-	const FPS = 5;
+	const FPS = 10;
 	const CELL_SIZE = 25;
-	const SNAKE_START_SIZE = 3;
+	const SNAKE_START_LENGTH = 3;
 
 
-   	const world = World.new(GRID_WIDTH, RAND_START, SNAKE_START_SIZE);
+   	const world = World.new(GRID_WIDTH, SNAKE_START_LENGTH);
 
     const worldWidth = world.width();
 
@@ -24,8 +23,6 @@ init().then((wasm) => {
     
 	const play = () => {
 	
-		const status = world.state();
-
 		const paintProps = {
 			ctx,
 			world,
@@ -36,10 +33,14 @@ init().then((wasm) => {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			paint(paintProps);
 			world.step();
-			requestAnimationFrame(play)
+			requestAnimationFrame(play);
 		}, 1000 / FPS);
 	}
 
-	addKeyboardListener(world);
+
+	document.addEventListener('keydown', (e) => handleKeyPress(e, world));
+	gameControlBtn.addEventListener('click', (e) => handleControlBtnClick(e, world));
+
+	
 	play();
 });

@@ -133,7 +133,9 @@ impl Snake {
     pub fn check_dead(&self) -> bool {
         return self.body.0[1..self.length()].contains(&self.head());
     }
-
+    pub fn get_direction(&self) -> DirectionKind {
+        self.direction
+    }
     pub fn change_direction(&mut self, direction: DirectionKind) {
         let next_cell = self.gen_next_snake_cell(&direction);
         if !self.body.contains_cell(&next_cell) {

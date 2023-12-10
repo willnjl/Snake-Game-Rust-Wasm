@@ -1,4 +1,4 @@
-import { CELL_SIZE } from "./consts"; 
+import { CELL_SIZE, gameControlBtn } from "./consts"; 
 import { World } from "snake_game";
 import { InitOutput } from "snake_game";
 import { gameStatusText, gamePointsText } from "./consts";
@@ -83,6 +83,8 @@ function drawGameStatus({world}: DrawProps) {
 
     gameStatusText.innerHTML = world.game_status_text();
     gamePointsText.innerHTML = world.points().toString();
+
+    gameControlBtn.innerHTML = world.game_btn_text();
 
 }
 

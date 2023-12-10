@@ -6,6 +6,7 @@ use crate::elements::gamestate::GameStateKind;
 use crate::elements::reward::Reward;
 use crate::elements::snake::Cell;
 use crate::elements::snake::Snake;
+use crate::utilities::rnd;
 
 #[wasm_bindgen]
 pub struct World {
@@ -14,16 +15,18 @@ pub struct World {
     snake: Snake,
     points: usize,
     reward: Option<Reward>,
-    pub state: GameState,
+    starting_size: usize,
+    state: GameState,
 }
 
 #[wasm_bindgen]
 impl World {
-    pub fn new(width: usize, starting_index: usize, starting_size: usize) -> World {
+    pub fn new(width: usize, starting_size: usize) -> World {
         let size: usize = width * width;
+        let starting_index = World::starting_index(size);
         let snake: Snake = Snake::new(starting_index, starting_size, width, size);
         let reward = Some(Reward::new(size, &snake));
-        let state = GameState::new();
+        let state: GameState = GameState::new();
 
         World {
             reward,
@@ -31,12 +34,34 @@ impl World {
             size,
             snake,
             state,
+            starting_size,
             points: 0,
         }
     }
 
+    pub fn get_direction(&self) -> DirectionKind {
+        self.snake.get_direction()
+    }
+
+    pub fn game_status_text(&self) -> String {
+        self.state.status()
+    }
+
+    pub fn game_btn_text(&self) -> String {
+        self.state.btn()
+    }
+
+    pub fn handle_click(&mut self) {
+        match self.state.get() {
+            None => self.state.playing(),
+            Some(GameStateKind::Paused) => self.state.playing(),
+            Some(GameStateKind::Played) => self.state.pause(),
+            _ => self.restart(),
+        }
+    }
+
     pub fn step(&mut self) {
-        match self.state.get_state() {
+        match self.state.get() {
             Some(GameStateKind::Played) => {
                 self.snake.step();
                 if Reward::check_consumed(&self.reward, &self.snake.head()) {
@@ -58,9 +83,6 @@ impl World {
         self.size
     }
 
-    pub fn state(&self) -> Option<GameStateKind> {
-        self.state.get_state()
-    }
     /**
      * *const is raw pointer
      * borrowing rules dont apply
@@ -82,15 +104,6 @@ impl World {
 
     pub fn change_snake_direction(&mut self, direction: DirectionKind) {
         self.snake.change_direction(direction)
-    }
-
-    pub fn game_status_text(&self) -> String {
-        match self.state.get_state() {
-            Some(GameStateKind::Played) => String::from("You are playing"),
-            Some(GameStateKind::Lost) => String::from("You Lost!"),
-            Some(GameStateKind::Won) => String::from("You Won!"),
-            _ => String::from("Start the game"),
-        }
     }
 
     pub fn points(&self) -> usize {
@@ -116,5 +129,21 @@ impl World {
     fn lose(&mut self) {
         self.state.lost();
         self.reward = None;
+    }
+
+    fn starting_index(max: usize) -> usize {
+        rnd(max)
+    }
+
+    fn restart(&mut self) {
+        self.points = 0;
+        self.snake = Snake::new(
+            World::starting_index(self.size),
+            self.starting_size,
+            self.width,
+            self.size,
+        );
+        self.reward = Some(Reward::new(self.size, &self.snake));
+        self.state.playing();
     }
 }
