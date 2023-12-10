@@ -12,7 +12,7 @@ type DrawProps = {
 
 function drawWorld({world, ctx}: DrawProps) {
     const worldWidth = world.width();
-    ctx.strokeStyle = "#ccc";
+    ctx.strokeStyle = "#eee";
     ctx.beginPath();
 
 
