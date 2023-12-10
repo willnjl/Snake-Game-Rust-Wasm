@@ -1,4 +1,4 @@
-import { CELL_SIZE, gameControlBtn } from "./consts"; 
+import { CELL_SIZE, SNAKE_BODY_COLOR, SNAKE_HEAD_COLOR, gameControlBtn } from "./consts"; 
 import { World } from "snake_game";
 import { InitOutput } from "snake_game";
 import { gameStatusText, gamePointsText } from "./consts";
@@ -43,7 +43,7 @@ function drawSnake({wasm, world, ctx}: DrawProps) {
         const index = cell;
         const posX = index % worldWidth;
         const posY = Math.floor(index / worldWidth);
-        ctx.fillStyle = i === snakeCells.length - 1 ? "#FF0099" : "#AA0099"
+            ctx.fillStyle = i === snakeCells.length - 1 ? SNAKE_HEAD_COLOR : SNAKE_BODY_COLOR;
         ctx.beginPath();
         
         ctx.moveTo(posX, posY);
