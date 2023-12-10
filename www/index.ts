@@ -2,13 +2,9 @@ import init, { World, GameStateKind, DirectionKind } from "snake_game";
 import { rnd } from "./utils";
 import paint from "./src/paint";
 import { handleControlBtnClick, handleKeyPress } from "./src/events";
-import { canvas,ctx, gameControlBtn } from "./src/consts";
+import { canvas,ctx, gameControlBtn, GRID_WIDTH,SNAKE_START_LENGTH, CELL_SIZE, FPS } from "./src/consts";
 
 init().then((wasm) => {
-	const GRID_WIDTH = 10;
-	const FPS = 10;
-	const CELL_SIZE = 25;
-	const SNAKE_START_LENGTH = 3;
 
 
    	const world = World.new(GRID_WIDTH, SNAKE_START_LENGTH);
