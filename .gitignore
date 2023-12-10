@@ -2,6 +2,7 @@
 main
 node_modules
 public/
+.DS_Store
 
 # Added by cargo
 #
