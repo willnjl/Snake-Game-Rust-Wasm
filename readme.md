@@ -36,13 +36,13 @@ To run the project locally, follow these steps:
    cd Snake-Game-Rust-Wasm
    ```
 
-3. **Install Dependencies:**
+3. **Compile Rust:**
 
    ```bash
-   cargo watch -s "wasm-pack build --target web" -w "src" 
+   wasm-pack build --target web
    ```
 
-4. **Build and Serve the Project:**
+4. **Generate the Frontend**
 
    ```bash
    cd www/ && npm run dev
