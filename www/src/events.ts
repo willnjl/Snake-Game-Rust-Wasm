@@ -17,6 +17,8 @@ export const handleKeyPress = (e: KeyboardEvent, world: World) => {
 		world.change_snake_direction(DirectionKind.Down)
 	}
 
+
+	world.step();
 };
 
 

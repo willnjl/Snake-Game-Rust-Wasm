@@ -39,10 +39,6 @@ impl World {
         }
     }
 
-    pub fn get_direction(&self) -> DirectionKind {
-        self.snake.get_direction()
-    }
-
     pub fn game_status_text(&self) -> String {
         self.state.status()
     }
